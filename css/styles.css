@@ -1,0 +1,17 @@
+body {
+    margin-top: 60px;
+    font-family: 'Lato', sans-serif;
+    background-color: yellow;
+}
+
+.nav-bar-color{
+        border: 1px solid grey;
+        background-color: grey;
+        
+    }
+
+.navbar-brand{
+    float: center;
+    color:black;
+    margin-left: 45%;
+}
