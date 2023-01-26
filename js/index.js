@@ -1,8 +1,25 @@
+
+const express = require('express');
+const app = express();
 const http = require('http'),
   fs = require('fs'),
   url = require('url');
+const morgan = require('morgan');
+  
 
 http.createServer((request, response) => {
+
+  app.use(morgan('common'));
+  app.use('/documentation.html', express.static('public'));
+
+  app.get('/', (req, res) => {
+  res.send('Welcome to my app!');
+});
+
+  app.get('/movies', (req, res) => {
+  res.send('This is where you will find information regarding the movies.');
+});
+
   let addr = request.url,
     q = url.parse(addr, true),
     filePath = '';
@@ -34,3 +51,12 @@ http.createServer((request, response) => {
 
 }).listen(8080);
 console.log('My test server is running on Port 8080.');
+
+// error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Uh Oh, something isn't where it is supposed to be, i'll go looking, please try later");
+});
+
+
+
