@@ -173,6 +173,24 @@ let movies = [
   },
 ];
 
+
+
+// GET/Read requests(RETURN LIST of all movies to user) in JSON format
+app.get('/', (req, res) => {
+  res.status(200).json("Welcome to my APP!");
+});
+
+app.get('/users', (req, res) => {
+  res.status(200).json(users);
+});
+
+// Gets the data about a single student, by id
+
+app.get('/users/:name', (req, res) => {
+  res.json(users.find((user) =>
+    { return user.name === req.params.name }));
+});
+
 // Allow new users to register(CREAT a new user)
 app.post('/users', (req, res) => {
   const newUser = req.body;
