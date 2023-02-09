@@ -8,14 +8,14 @@ app.use(bodyParser.json());
 
 let users = [
   {
-    id: 1,
-    name: "Kim",
-    favoritemMovies: []
+    "id": "1",
+    "name": "Kim",
+    "favoritemMovie": []
   },
   {
-    id: 2,
-    name: "Joe",
-    favoritemMovies: ["The Fountain"]
+    "id": "2",
+    "name": "Joe",
+    "favoritemMovie": ["The Fountain"]
   },
 
 ]
@@ -175,11 +175,12 @@ let movies = [
 
 
 
-// GET/Read requests(RETURN LIST of all movies to user) in JSON format
+
 app.get('/', (req, res) => {
   res.status(200).json("Welcome to my APP!");
 });
 
+// GET/Read requests(RETURN LIST of all movies to user) in JSON format
 app.get('/users', (req, res) => {
   res.status(200).json(users);
 });
@@ -226,8 +227,8 @@ app.post('/users/:id/movieTitle', (req, res) => {
   let user = users.find( user => user.id == id );
 
   if (user) {
-    user.favoritemMovies.push(movieTitle);
-    res.status(200).send('${movieTitle} has been added to user ${id} array');
+    user.favoriteMovie.push(movieTitle);
+    res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
   } else {
     res.status(400).send('no such user')
   }
@@ -240,7 +241,7 @@ app.delete('/users/:id/movieTitle', (req, res) => {
   let user = users.find( user => user.id == id );
 
   if (user) {
-    user.favoritemMovies = user.favoritemMovies.filter( title => title !== movieTitle );
+    user.favoriteMovie = user.favoriteMovie.filter( title => title !== movieTitle );
     res.status(200).send('${movieTitle} has been removed from the  user ${id} array');
   } else {
     res.status(400).send('no such user')
@@ -254,8 +255,8 @@ app.delete('/users/:id', (req, res) => {
   let user = users.find( user => user.id == id );
 
   if (user) {
-    users = user.filter( user => user.id != id );
-    res.status(200).send('user  ${id} has been deleted');
+    users = users.filter( user => user.id != id );
+    res.status(200).send(`user ${id} has been deleted`);
   } else {
     res.status(400).send('no such user')
   }
