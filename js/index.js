@@ -15,7 +15,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 //allows Mongoose to connect to that database so it can perform CRUD operations on the documents it contains from within your REST API
-mongoose.connect('mongodb://localhost:27017/[movies]', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 
@@ -325,9 +325,9 @@ app.put('/users/:id', (req, res) =>{
   }
 );
 
- // Allows users to add a movie to their favourites	
-app.post('/users/:id/:movieTitle', (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.movieTitle }, {
+ // Add a movie to a user's list of favorites
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
    { new: true }, // This line makes sure that the updated document is returned
@@ -358,25 +358,24 @@ app.delete('/users/:id/:movieTitle', (req, res)=> {
   }
 );
 
-// Allows existing users to deregister
-app.delete('/users/:id', (req, res)=> {
-  Users.findOneAndRemove({ Username: req.params.id })
-    .then(function (user) {
+// Delete a user by username
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
       if (!user) {
-        res.status(400).send(req.params.Username + ' was not found.');
+        res.status(400).send(req.params.Username + ' was not found');
       } else {
         res.status(200).send(req.params.Username + ' was deleted.');
       }
     })
-    .catch(function (err) {
+    .catch((err) => {
       console.error(err);
-      res.status(400).send('Error: ' + err);
+      res.status(500).send('Error: ' + err);
     });
-}
-);
+});
 
 // listen for requests
-app.listen(8080, () => {
+app.listen(3030, () => {
   console.log('Your app is listening on port 8080.');
 });
 
@@ -387,4 +386,3 @@ app.listen(8080, () => {
 
 
 
-  
