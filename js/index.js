@@ -7,6 +7,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
@@ -200,7 +204,8 @@ MOVIE Queries
 */
 
 // Returns a list of all movies
-app.get("/movies", (req, res) => {
+app.get("/movies", passport.authenticate('jwt', { session: false }),
+(req, res) => {
   Movies.find().then(movies => {
         res.status(200).json(movies);
      })
@@ -213,7 +218,8 @@ app.get("/movies", (req, res) => {
 
 // Get single movie, by title
 
-app.get('/movies/:title', (req, res) =>{
+app.get('/movies/:title',passport.authenticate('jwt', { session: false }),
+ (req, res) =>{
     Movies.findOne({ Title: req.params.title })
       .then(function (movie) {
         res.json(movie);
@@ -227,7 +233,8 @@ app.get('/movies/:title', (req, res) =>{
 
 // Get data about genre, by name
 
-app.get( '/movies/genre/:genreName', (req, res) => {
+app.get( '/movies/genre/:genreName', passport.authenticate('jwt', { session: false }),
+(req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.genreName })
       .then(function (movie) {
         res.json(movie.Genre);
@@ -240,7 +247,8 @@ app.get( '/movies/genre/:genreName', (req, res) => {
 );
 
 // Get data about a director, by name
-app.get('/movies/director/:directorName', (req, res) => {
+app.get('/movies/director/:directorName',passport.authenticate('jwt', { session: false }),
+ (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.directorName })
       .then(function (movie) {
         res.json(movie.Director);
@@ -261,7 +269,8 @@ USER Queries
 
 //Adds a new user /allows new users to register
 
-app.post('/users', (req, res) => {
+app.post('/users', passport.authenticate('jwt', { session: false }),
+(req, res) => {
   Users.findOne({ Username: req.body.Username })//req.body is what the user types in for username
     .then((user) => {
       if (user) {
@@ -288,7 +297,8 @@ app.post('/users', (req, res) => {
 });
 
 //Get all users
-app.get('/users',  function (req,res) {
+app.get('/users', passport.authenticate('jwt', { session: false }),
+ function (req,res) {
   Users.find().then(function (users) {
       res.status(201).json(users);
     })
@@ -300,7 +310,8 @@ app.get('/users',  function (req,res) {
 
 
 // Allows users to update their user info
-app.put('/users/:id', (req, res) =>{
+app.put('/users/:id', passport.authenticate('jwt', { session: false }),
+(req, res) =>{
     // Checks whether object with same username as indicated in the requestURL has been found
     Users.findOneAndUpdate({ Username: req.params.id },
       {
@@ -326,7 +337,8 @@ app.put('/users/:id', (req, res) =>{
 );
 
  // Add a movie to a user's list of favorites
-app.post('/users/:Username/movies/:MovieID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }),
+ (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
@@ -342,7 +354,8 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 });
 
 // (DELETE)Allows users to remove a movie from their favourites
-app.delete('/users/:id/:movieTitle', (req, res)=> {
+app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }),
+(req, res)=> {
     Users.findOneAndRemove({ Username: req.params.movieTitle })
       .then(function (user) {
         if (!user) {
@@ -359,7 +372,8 @@ app.delete('/users/:id/:movieTitle', (req, res)=> {
 );
 
 // Delete a user by username
-app.delete('/users/:Username', (req, res) => {
+app.delete('/users/:Username',passport.authenticate('jwt', { session: false }),
+ (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
@@ -375,7 +389,7 @@ app.delete('/users/:Username', (req, res) => {
 });
 
 // listen for requests
-app.listen(3030, () => {
+app.listen(4040, () => {
   console.log('Your app is listening on port 8080.');
 });
 
