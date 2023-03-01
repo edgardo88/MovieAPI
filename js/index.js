@@ -267,6 +267,7 @@ USER Queries
 */
 
 
+
 //Adds a new user /allows new users to register
 
 app.post('/users', passport.authenticate('jwt', { session: false }),
@@ -307,6 +308,22 @@ app.get('/users', passport.authenticate('jwt', { session: false }),
       res.status(500).send('Error: ' + err);
     });
 });
+
+//creaet user login
+app.post('/users', 
+[ 
+  // minimum value of 5 characters
+  check ('Username', 'Username is required').isLength({min: 5}),
+  check ('Username', 'Username contains non alphanumeric character - not allowed.').isAlphanumeric(),
+  // is not empty
+  check('Password', 'Password is required').not().isEmpty(),
+  check ('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+    // check the validation object for errors
+  let errors = validationResult(req);
+
+
+   });
 
 
 // Allows users to update their user info
@@ -354,22 +371,24 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
 });
 
 // (DELETE)Allows users to remove a movie from their favourites
-app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }),
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }),
 (req, res)=> {
-    Users.findOneAndRemove({ Username: req.params.movieTitle })
-      .then(function (user) {
-        if (!user) {
-          res.status(400).send(req.params.Username + ' was not found.');
+  Users.findOneAndUpdate(
+    { Username: req.params.Username },
+    {
+        $pull: { FavoriteMovies: req.params.MovieID },
+    },
+    { new: true },
+    (err, updatedUser) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error ' + err);
         } else {
-          res.status(200).send(req.params.Username + ' was deleted.');
+            res.json(updatedUser);
         }
-      })
-      .catch(function (err) {
-        console.error(err);
-        res.status(400).send('Error: ' + err);
-      });
-  }
+    }
 );
+});
 
 // Delete a user by username
 app.delete('/users/:Username',passport.authenticate('jwt', { session: false }),
@@ -389,14 +408,9 @@ app.delete('/users/:Username',passport.authenticate('jwt', { session: false }),
 });
 
 // listen for requests
-app.listen(4040, () => {
+app.listen(50, () => {
   console.log('Your app is listening on port 8080.');
 });
-
-
-
-
-
 
 
 
