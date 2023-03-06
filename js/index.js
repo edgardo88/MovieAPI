@@ -197,7 +197,7 @@ let movies = [
 
 
 //welcome page response to user
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json("Welcome to my APP!");
 });
 
@@ -208,7 +208,7 @@ MOVIE Queries
 */
 
 // Returns a list of all movies
-app.get("/movies", passport.authenticate('jwt', { session: false }),
+app.get("/movies", passport.authenticate("jwt", { session: false }),
 (req, res) => {
   Movies.find().then(movies => {
         res.status(200).json(movies);
@@ -274,7 +274,7 @@ USER Queries
 
 //Adds a new user /allows new users to register
 
-app.post('/users', 
+app.post("/users", 
 [
   check('Username', 'Username is required').isLength({min: 5}),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
@@ -290,7 +290,7 @@ app.post('/users',
     Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Username + 'already exists');
+          return res.status(400).send(req.body.Username + "already exists");
         } else {
           Users
             .create({
@@ -302,13 +302,13 @@ app.post('/users',
             .then((user) =>{res.status(201).json(user) })
           .catch((error) => {
             console.error(error);
-            res.status(500).send('Error: ' + error);
+            res.status(500).send("Error: " + error);
           })
         }
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send('Error: ' + error);
+        res.status(500).send("Error: " + error);
       });
   });
 
