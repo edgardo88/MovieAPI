@@ -1,5 +1,4 @@
 const passport = require('passport'),
-//defines your basic HTTP authentication for login requests
   LocalStrategy = require('passport-local').Strategy,
   Models = require('./models.js'),
   passportJWT = require('passport-jwt');
@@ -24,9 +23,9 @@ passport.use(new LocalStrategy({
       return callback(null, false, {message: 'Incorrect username or password.'});
     }
 
-    if(!user.validatePassword(password)){
-        console.log("incorrect password");
-        return callback(null, false, {message: "Incorrect password."});
+    if (!user.validatePassword(password)) {
+      console.log('incorrect password');
+      return callback(null, false, {message: 'Incorrect password.'});
     }
 
     console.log('finished');
