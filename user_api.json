@@ -1,0 +1,4 @@
+{"_id":{"$oid":"63ecbb999d844e36d06e8bf6"},"Username":"user1","Password":"pw123","Email":"user1@email.com","Birthday":{"$date":"1984-01-01T00:00:00Z"},"FavoriteMovies":[{"$oid":"63ebb3f39d844e36d06e8bea"}]}
+{"_id":{"$oid":"63ecbc659d844e36d06e8bf7"},"Username":"user3","Password":"pw123","Email":"user3@email.com","Birthday":{"$date":"1984-01-04T00:00:00Z"},"FavoriteMovies":[{"$oid":"63ebbe669d844e36d06e8beb"}]}
+{"_id":{"$oid":"63ecbc8b9d844e36d06e8bf8"},"Username":"user2","Password":"pw123","Email":"newmail@gmail.com","Birthday":{"$date":"1984-01-03T00:00:00Z"},"FavoriteMovies":[{"$oid":"63ebc2569d844e36d06e8bed"}]}
+{"_id":{"$oid":"63ecbcb39d844e36d06e8bf9"},"Username":"user4","Password":"pw123","Email":"user4@email.com","Birthday":{"$date":"1984-01-11T00:00:00Z"},"FavoriteMovies":[{"$oid":"63ebc4019d844e36d06e8bf0"},{"$oid":"63ebbe669d844e36d06e8beb"}]}
