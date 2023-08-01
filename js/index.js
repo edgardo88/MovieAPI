@@ -35,7 +35,7 @@ let movies = [];
 
 //welcome page response to user
 app.get("/", (req, res) => {
-  res.status(200).json("Welcome to my APP!");
+  res.status(200).json("Welcome to my cool APP!");
 });
 
 /*
