@@ -25,8 +25,7 @@ const Users = Models.User;
 //allows Mongoose to connect to that database so it can perform CRUD operations on the documents it contains from within your REST API
 //mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect('mongodb+srv://edgardofigueroa:Jackie_2021!@cluster0.nl5qld3.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 let movies = [];
