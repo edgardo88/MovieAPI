@@ -14,6 +14,7 @@ app.use(cors());
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
+auth(app);
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -48,7 +49,7 @@ app.get("/movies", passport.authenticate('jwt', { session: false }),(req, res) =
   Movies.find().then(movies => {
         res.status(200).json(movies);
      })
-     .catch(error => {
+     .catch(err => {
         console.error(err);
         res.status(500).send("Error: " + err);
      });
@@ -197,21 +198,25 @@ app.put('/users/:id', passport.authenticate('jwt', { session: false }),
 );
 
  // Add a movie to a user's list of favorites
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }),
- (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {
-     $push: { FavoriteMovies: req.params.MovieID }
-   },
-   { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });
-});
+app.post(
+  "/users/:Username/movies/:MovieID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { Username: req.params.Username },
+      {
+        $push: { FavoriteMovies: req.params.MovieID },
+      },
+      { new: true } // This line makes sure that the updated document is returned
+    )
+      .then((updatedUser) => {
+        res.json(updatedUser);
+      })
+      .catch((err) => {
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
 
 // (DELETE)Allows users to remove a movie from their favourites
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -253,6 +258,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
-
-
-
