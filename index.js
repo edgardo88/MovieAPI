@@ -164,12 +164,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }),
 // Allows users to update their user info
 app.put('/users/:id', passport.authenticate('jwt', { session: false }),
 (req, res) =>{
-  // check the validation object for errors
-  let errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
+  
   let hashedPassword = Users.hashPassword(req.body.Password);
 
     // Checks whether object with same username as indicated in the requestURL has been found
@@ -184,18 +179,17 @@ app.put('/users/:id', passport.authenticate('jwt', { session: false }),
         }
       },
       // makes sure that the updated document is returned
-      { new: true },
-      function (err, updatedUser) {
-        if (err) {
-          console.error(err);
-          res.status(500).send('Error: ' + err);
-        } else {
-          res.json(updatedUser);
-        }
-      }
-    );
-  }
-);
+      { new: true }) // This line makes sure that the updated document is returned
+      .then(updatedUser => {
+        res.json(updatedUser);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  });
+  
+
 
  // Add a movie to a user's list of favorites
  app.post(
@@ -259,7 +253,7 @@ app.post(
 app.delete('/users/:Username',passport.authenticate('jwt', { session: false }),
  (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
-    .then((user) => {
+    .then(() => {
       
         res.status(200).send(req.params.Username + ' was deleted.');
       
