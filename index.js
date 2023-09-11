@@ -118,18 +118,14 @@ app.post("/users",
   check('Email', 'Email does not appear to be valid').isEmail()
 ], (req, res) => {
     // check the validation object for errors
-    let errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
+    //let errors = validationResult(req);
+    //if (!errors.isEmpty()) {
+    //  return res.status(422).json({ errors: errors.array() });
+    //}
     let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ Username: req.body.Username })
-      .then((user) => {
-        if (user) {
-          return res.status(400).send(req.body.Username + "already exists");
-        } else {
-          Users
-            .create({
+      
+          Users.create({
               Username: req.body.Username,
               Password: hashedPassword,
               Email: req.body.Email,
@@ -140,12 +136,7 @@ app.post("/users",
             console.error(error);
             res.status(500).send("Error: " + error);
           })
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send("Error: " + error);
-      });
+     
   });
 
 //Get all users
