@@ -218,7 +218,7 @@ app.put('/users/:id', passport.authenticate('jwt', { session: false }),
 });
 */
 // (DELETE)Allows users to remove a movie from their favourites
-app.post(
+app.delete(
   "/users/:Username/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
