@@ -151,14 +151,14 @@ app.get('/users', passport.authenticate('jwt', { session: false }),
 
 
 // Allows users to update their user info
-app.put('/users/:id', passport.authenticate('jwt', { session: false }),
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
 (req, res) =>{
   
   let hashedPassword = Users.hashPassword(req.body.Password);
 
     // Checks whether object with same username as indicated in the requestURL has been found
     Users.findOneAndUpdate(
-      { Username: req.params.id },
+      { Username: req.params.Username },
       {
         $set: {
           Username: req.body.Username,
