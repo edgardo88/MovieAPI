@@ -32,5 +32,9 @@
     "url": "https://github.com/edgardo88/Movieapi/issues"
   },
   "homepage": "https://github.com/edgardo88/Movieapi#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.9.3",
+    "parcel": "^2.9.3"
+  }
 }
